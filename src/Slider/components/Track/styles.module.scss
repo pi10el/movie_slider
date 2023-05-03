@@ -1,6 +1,4 @@
-.track {
-  cursor: grab;
-  position: relative;
+.slider {
   user-select: none;
   max-width: 1800px;
   padding: 0 20px;
@@ -14,36 +12,40 @@
   }
 }
 
-.overlay {
-  position: absolute;
-  pointer-events: none;
-  left: 20px;
-  right: 20px;
-  top: 0;
-  height: 100%;
-}
-
-.arrows {
-  position: relative;
-  z-index: 2;
+.content {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-top: 40px;
+  justify-content: space-between;
   width: 100%;
   height: 100%;
 
-  & > svg {
-    width: 25px;
-    min-width: 25px;
-    height: 25px;
-    min-height: 25px;
-    fill: #fff;
-    opacity: 0.5;
-    transition: 0.15s ease-in-out;
+  & > button {
+    position: relative;
+    width: 35px;
+    height: 35px;
+    z-index: 5;
+    border-radius: 5px;
+    background-color: #080715;
 
-    &:last-child {
-      margin-left: 40px;
+    & > svg {
+      width: 25px;
+      min-width: 25px;
+      height: 25px;
+      min-height: 25px;
+      fill: #fff;
+      opacity: 0.5;
+      transition: 0.15s ease-in-out;
+    }
+
+    &:hover > svg {
+      opacity: 1;
     }
   }
+}
+
+.track {
+  cursor: grab;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }

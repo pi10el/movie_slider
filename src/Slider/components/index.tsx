@@ -2,10 +2,9 @@
 import { Card } from './Card';
 import { Track } from './Track';
 
-export const Slider = ({ movies, params }: ISlider) => (
-  // <Track heightTrack={320} titleMargin={60} title="Топ за месяц">
+export const Slider = ({ items, params }: ISlider) => (
   <Track {...params}>
-    {movies.map((item, i) => (
+    {items.map((item, i) => (
       <Card
         key={i + 1}
         position={i + 1}

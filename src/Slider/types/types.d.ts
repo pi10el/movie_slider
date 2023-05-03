@@ -15,5 +15,5 @@ interface ICard {
 
 interface ISlider {
   params: Omit<ITrack, 'children'>;
-  movies: Omit<ICard, 'position'>[];
+  items: Omit<ICard, 'position'>[];
 }
