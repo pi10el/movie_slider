@@ -33,22 +33,35 @@ export const Track = ({ children, ...props }: ITrack) => {
     setLeft(width >= 0 ? 0 : width);
   };
 
-  const clickButton = (direction: 'left' | 'right') => () => {
-    if (direction === 'left' && position.get() < 0) {
-      const isFull = position.get() + 500 > 0;
+  const handleTrack = (
+    direction: 'left' | 'right' | null,
+    event?: React.WheelEvent,
+  ) => {
+    let offset = 600;
 
-      position.set(isFull ? 0 : position.get() + 700);
+    if (event) {
+      direction = event.deltaY > 0 ? 'right' : 'left';
+      offset = 150;
     }
 
-    if (direction == 'right' && position.get() > left) {
-      const isFull = position.get() - 500 < left;
+    switch (direction) {
+      case 'left': {
+        const isFull = position.get() + offset > 0;
+        position.set(isFull ? 0 : position.get() + offset);
 
-      position.set(isFull ? left : position.get() - 700);
+        break;
+      }
+
+      case 'right': {
+        const isFull = position.get() - offset < left;
+        position.set(isFull ? left : position.get() - offset);
+
+        break;
+      }
     }
 
     setIsButton(true);
-
-    setTimeout(() => setIsButton(false), 500);
+    setTimeout(() => setIsButton(false), 50);
   };
 
   return (
@@ -64,7 +77,7 @@ export const Track = ({ children, ...props }: ITrack) => {
       <div className={styles.content}>
         <button
           disabled={isButton && isTransition}
-          onClick={clickButton('left')}
+          onClick={() => handleTrack('left')}
         >
           <IconArrow direction="left" />
         </button>
@@ -73,6 +86,7 @@ export const Track = ({ children, ...props }: ITrack) => {
           <motion.div
             ref={refTrack}
             drag="x"
+            onWheel={(e) => handleTrack(null, e)}
             dragConstraints={{ left, right: 0 }}
             onDragStart={() => {
               setIsDrag(true);
@@ -112,7 +126,7 @@ export const Track = ({ children, ...props }: ITrack) => {
 
         <button
           disabled={isButton && isTransition}
-          onClick={clickButton('right')}
+          onClick={() => handleTrack('right')}
         >
           <IconArrow direction="right" />
         </button>
