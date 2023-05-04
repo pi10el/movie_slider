@@ -27,7 +27,7 @@ export const Slider = ({ children, ...props }: Props) => {
   const refContainer = useRef<HTMLDivElement>(null);
   const refTitle = useRef<HTMLHeadingElement>(null);
 
-  const position = useMotionValue(0);
+  const x = useMotionValue(0);
 
   const [left, setLeft] = useState(0);
   const [heightTrack, setHeightTrack] = useState(0);
@@ -35,8 +35,8 @@ export const Slider = ({ children, ...props }: Props) => {
 
   const [isInit, setIsInit] = useState(false);
   const [isDrag, setIsDrag] = useState(false);
-  const [isAnimating, setIsAnumating] = useState(false);
   const [isTransition, setIsTransition] = useState(false);
+  const [position, setPosition] = useState(0);
 
   const initBox = useCallback((widthBox: number) => {
     const windowWidth = window.innerWidth;
@@ -47,7 +47,7 @@ export const Slider = ({ children, ...props }: Props) => {
     const width = scroll - offset;
 
     setContainer(containerWidth);
-    setLeft(width >= 0 ? 0 : width);
+    setLeft(width);
 
     const containerHeight = refTrack.current!.clientHeight;
     const titleHeight = refTitle.current!.clientHeight;
@@ -70,21 +70,19 @@ export const Slider = ({ children, ...props }: Props) => {
 
       switch (direction) {
         case 'left': {
-          const isDeep = position.get() + offset > 0;
-          position.set(isDeep ? 0 : position.get() + offset);
+          const isDeep = x.get() + offset > 0;
+          x.set(isDeep ? 0 : x.get() + offset);
 
           break;
         }
 
         case 'right': {
-          const isDeep = position.get() - offset < left;
-          position.set(isDeep ? left : position.get() - offset);
+          const isDeep = x.get() - offset < left;
+          x.set(isDeep ? left : x.get() - offset);
 
           break;
         }
       }
-
-      setIsAnumating(true);
     },
     [container, left],
   );
@@ -94,8 +92,9 @@ export const Slider = ({ children, ...props }: Props) => {
       .current!.style['transform'].split(' ')[0]
       .replace(/[^\-\.\d]/g, '');
 
-    position.set(+offset);
+    x.set(+offset);
 
+    setPosition(x.get());
     setIsTransition(false);
   }, []);
 
@@ -104,13 +103,13 @@ export const Slider = ({ children, ...props }: Props) => {
     const scrollHandler = (e: any) => e.preventDefault();
 
     window.addEventListener('resize', initHandler);
-    refContainer.current!.addEventListener('mousewheel', scrollHandler);
-    refContainer.current!.addEventListener('touchmove', scrollHandler);
+    refTrack.current!.addEventListener('mousewheel', scrollHandler);
+    refTrack.current!.addEventListener('touchmove', scrollHandler);
 
     return () => {
       window.removeEventListener('resize', initHandler);
-      refContainer.current!.removeEventListener('mousewheel', scrollHandler);
-      refContainer.current!.removeEventListener('touchmove', scrollHandler);
+      refTrack.current!.removeEventListener('mousewheel', scrollHandler);
+      refTrack.current!.removeEventListener('touchmove', scrollHandler);
     };
   }, []);
 
@@ -126,8 +125,7 @@ export const Slider = ({ children, ...props }: Props) => {
 
       <div className={styles.content}>
         <button
-          disabled={isAnimating}
-          className={position.get() < 0 && !isTransition ? '' : styles.hidden}
+          className={position !== 0 && !isTransition ? '' : styles.hidden}
           style={{ left: `${arrowMargin}px` }}
           onClick={() => handleTrack('left')}
         >
@@ -135,10 +133,7 @@ export const Slider = ({ children, ...props }: Props) => {
         </button>
 
         <button
-          disabled={isAnimating}
-          className={
-            position.get() > left && !isTransition ? '' : styles.hidden
-          }
+          className={position !== left && !isTransition ? '' : styles.hidden}
           style={{ right: `${arrowMargin}px` }}
           onClick={() => handleTrack('right')}
         >
@@ -156,19 +151,20 @@ export const Slider = ({ children, ...props }: Props) => {
             onDragStart={() => {
               setIsDrag(true);
               setIsTransition(true);
+              console.log(x.get());
             }}
             onDragEnd={() => setIsDrag(false)}
-            animate={{ x: position.get() }}
-            transition={{ duration: 0.2, type: 'tween' }}
+            onTransitionEnd={() => setPosition(x.get())}
+            dragTransition={{ bounceStiffness: 600, bounceDamping: 50 }}
             onDragTransitionEnd={() => handleTransition()}
-            onAnimationComplete={() => setIsAnumating(false)}
             onLayoutMeasure={(box) => {
               if (!isInit) initBox(box.x.max - box.x.min);
             }}
             dragElastic={0.1}
-            dragTransition={{ bounceStiffness: 600, bounceDamping: 50 }}
             style={{
               position: 'absolute',
+              transition: !isTransition ? '0.2s linear' : 'none',
+              x,
             }}
           >
             <div
