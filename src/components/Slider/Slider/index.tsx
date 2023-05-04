@@ -119,6 +119,7 @@ export const Slider = ({ children, ...props }: Props) => {
 
       <div className={styles.content}>
         <button
+          style={{ left: '-35px' }}
           disabled={isButton && isTransition}
           onClick={() => handleTrack('left')}
         >
@@ -166,6 +167,7 @@ export const Slider = ({ children, ...props }: Props) => {
         </div>
 
         <button
+          style={{ right: '-35px' }}
           disabled={isButton && isTransition}
           onClick={() => handleTrack('right')}
         >
