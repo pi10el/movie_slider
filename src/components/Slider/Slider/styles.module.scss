@@ -27,6 +27,7 @@
     height: 35px;
     border-radius: 5px;
     background-color: #080715;
+    transition: 0.1s ease-in-out;
 
     & > svg {
       width: 25px;
@@ -40,6 +41,15 @@
 
     &:hover > svg {
       opacity: 1;
+    }
+
+    &:disabled {
+      pointer-events: none;
+    }
+
+    &.hidden {
+      pointer-events: none;
+      opacity: 0;
     }
   }
 }

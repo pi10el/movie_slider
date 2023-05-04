@@ -85,7 +85,7 @@ export const Slider = ({ children, ...props }: Props) => {
       }
 
       setIsButton(true);
-      setTimeout(() => setIsButton(false), 0);
+      setTimeout(() => setIsButton(false));
     },
     [container, left],
   );
@@ -119,18 +119,15 @@ export const Slider = ({ children, ...props }: Props) => {
 
       <div className={styles.content}>
         <button
-          style={{ left: '-35px' }}
+          className={position.get() < 0 ? '' : styles.hidden}
+          style={{ left: `-${35 + arrowMargin}px` }}
           disabled={isButton && isTransition}
           onClick={() => handleTrack('left')}
         >
           <IconArrow direction="left" />
         </button>
 
-        <div
-          ref={refContainer}
-          className={styles.track}
-          style={{ margin: `0 ${arrowMargin}px` }}
-        >
+        <div ref={refContainer} className={styles.track}>
           <motion.div
             ref={refTrack}
             drag="x"
@@ -150,6 +147,7 @@ export const Slider = ({ children, ...props }: Props) => {
             }}
             dragElastic={0.1}
             dragTransition={{ bounceStiffness: 600, bounceDamping: 50 }}
+            transition={{ duration: 0.2, type: 'spring' }}
             style={{
               position: 'absolute',
             }}
@@ -167,7 +165,8 @@ export const Slider = ({ children, ...props }: Props) => {
         </div>
 
         <button
-          style={{ right: '-35px' }}
+          className={position.get() > left ? '' : styles.hidden}
+          style={{ right: `-${35 + arrowMargin}px` }}
           disabled={isButton && isTransition}
           onClick={() => handleTrack('right')}
         >
