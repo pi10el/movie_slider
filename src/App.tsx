@@ -21,8 +21,13 @@ const mock = [
 export const App = () => (
   <div className="app">
     <Slider
-      items={mock}
-      params={{ heightTrack: 320, title: 'Топ за месяц', titleMargin: 60 }}
+      items={mock} // массив карточек
+      params={{
+        title: 'Топ за месяц', // тайтле слайдера
+        arrowMargin: 20, // внутренний отступ от стрелок слайдера
+        titleMargin: 60, // отступ трека от тайтла
+        marginTop: 10, // верхний отступ от слайдера
+      }}
     />
   </div>
 );

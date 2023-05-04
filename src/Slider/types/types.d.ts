@@ -1,10 +1,9 @@
 interface ITrack {
   children: React.ReactNode;
-  heightTrack: number;
   title?: string;
   titleMargin?: number;
-  marginTop?: string;
-  containerPadding?: number;
+  arrowMargin?: number;
+  marginTop?: number;
 }
 
 interface ICard {
