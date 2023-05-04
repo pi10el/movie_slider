@@ -6,8 +6,8 @@
   min-width: 550px;
   height: 320px;
 
-  &:hover > .poster {
-    transform: translateY(-30px);
+  &:hover > h3 {
+    transform: translateX(-30px);
   }
 
   & > h3 {
@@ -23,6 +23,7 @@
     -webkit-background-clip: text;
     -webkit-text-stroke: 3px transparent;
     color: #080715;
+    transition: 0.15s ease-in-out;
   }
 }
 
@@ -36,7 +37,6 @@
   width: 100%;
   border-radius: 15px;
   overflow: hidden;
-  transition: 0.15s ease-in-out;
 
   & > img {
     pointer-events: none;
