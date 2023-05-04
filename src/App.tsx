@@ -1,4 +1,5 @@
-import { Slider } from './Slider';
+import { Slider } from './Slider/components/Slider/Slider';
+import { Card } from './Slider/components/Card';
 
 import kh_poster from './assets/image/kh_poster.png';
 import kh_title from './assets/image/kh_title.png';
@@ -21,13 +22,19 @@ const mock = [
 export const App = () => (
   <div className="app">
     <Slider
-      items={mock} // массив карточек
-      params={{
-        title: 'Топ за месяц', // тайтле слайдера
-        arrowMargin: 20, // внутренний отступ от стрелок слайдера
-        titleMargin: 60, // отступ трека от тайтла
-        marginTop: 10, // верхний отступ от слайдера
-      }}
-    />
+      marginTop={10}
+      titleMargin={60}
+      arrowMargin={20}
+      title="Топ за месяц"
+    >
+      {mock.map((item, i) => (
+        <Card
+          key={i + 1}
+          position={i + 1}
+          poster={item.poster}
+          title={item.title}
+        />
+      ))}
+    </Slider>
   </div>
 );

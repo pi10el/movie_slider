@@ -5,7 +5,7 @@ import { IconArrow } from '../icons/IconArrow';
 // styles
 import styles from './styles.module.scss';
 
-export const Track = ({ children, ...props }: ITrack) => {
+export const Slider = ({ children, ...props }: ITrack) => {
   const { title, marginTop = 0, titleMargin = 30, arrowMargin = 0 } = props;
 
   const refTrack = useRef<HTMLDivElement>(null);

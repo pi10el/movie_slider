@@ -14,5 +14,5 @@ interface ICard {
 
 interface ISlider {
   params: Omit<ITrack, 'children'>;
-  items: Omit<ICard, 'position'>[];
+  children: React.ReactNode;
 }
