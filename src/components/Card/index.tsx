@@ -1,6 +1,12 @@
 import styles from './styles.module.scss';
 
-export const Card = ({ poster, title, position }: ICard) => (
+interface Props {
+  poster: string;
+  title: string;
+  position: number;
+}
+
+export const Card = ({ poster, title, position }: Props) => (
   <div className={styles.content}>
     <h3>{position}</h3>
     <div className={styles.poster}>

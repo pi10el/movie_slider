@@ -1,5 +1,5 @@
-import { Slider } from './Slider/components/Slider/Slider';
-import { Card } from './Slider/components/Card';
+import { Slider } from './components/Slider/Slider';
+import { Card } from './components/Card';
 
 import kh_poster from './assets/image/kh_poster.png';
 import kh_title from './assets/image/kh_title.png';
@@ -22,10 +22,11 @@ const mock = [
 export const App = () => (
   <div className="app">
     <Slider
-      marginTop={10}
-      titleMargin={60}
-      arrowMargin={20}
-      title="Топ за месяц"
+      isWheel // доступ управления колесиком мыши
+      marginTop={10} // отступ сверху слайдера
+      titleMargin={60} // отступ снизу тайтла
+      arrowMargin={20} // отступ от стрелок управления
+      title="Топ за месяц" // название слайдера
     >
       {mock.map((item, i) => (
         <Card

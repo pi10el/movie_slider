@@ -5,8 +5,23 @@ import { IconArrow } from '../icons/IconArrow';
 // styles
 import styles from './styles.module.scss';
 
-export const Slider = ({ children, ...props }: ITrack) => {
-  const { title, marginTop = 0, titleMargin = 30, arrowMargin = 0 } = props;
+interface Props {
+  children: React.ReactNode;
+  title?: string;
+  isWheel?: boolean;
+  titleMargin?: number;
+  arrowMargin?: number;
+  marginTop?: number;
+}
+
+export const Slider = ({ children, ...props }: Props) => {
+  const {
+    title,
+    marginTop = 0,
+    titleMargin = 30,
+    arrowMargin = 0,
+    isWheel = false,
+  } = props;
 
   const refTrack = useRef<HTMLDivElement>(null);
   const refContainer = useRef<HTMLDivElement>(null);
@@ -119,7 +134,7 @@ export const Slider = ({ children, ...props }: ITrack) => {
             ref={refTrack}
             drag="x"
             onWheel={(e) => {
-              if (!isTransition) handleTrack(null, e);
+              if (!isTransition && isWheel) handleTrack(null, e);
             }}
             dragConstraints={{ left, right: 0 }}
             onDragStart={() => {
