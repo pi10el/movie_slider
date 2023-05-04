@@ -12,7 +12,6 @@
 }
 
 .content {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -20,13 +19,15 @@
   height: 100%;
 
   & > button {
-    display: block;
     position: absolute;
     z-index: 5;
-    width: 35px;
-    height: 35px;
+    display: block;
+    width: 45px;
+    height: 45px;
     border-radius: 5px;
+    border: 1px solid #fff;
     background-color: #080715;
+    opacity: 0.5;
     transition: 0.1s ease-in-out;
 
     & > svg {
@@ -35,11 +36,11 @@
       height: 25px;
       min-height: 25px;
       fill: #fff;
-      opacity: 0.5;
+
       transition: 0.15s ease-in-out;
     }
 
-    &:hover > svg {
+    &:hover {
       opacity: 1;
     }
 
@@ -52,6 +53,13 @@
       opacity: 0;
     }
   }
+}
+
+.arrows {
+  position: fixed;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
 }
 
 .track {

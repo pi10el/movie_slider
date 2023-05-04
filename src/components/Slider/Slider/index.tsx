@@ -35,7 +35,7 @@ export const Slider = ({ children, ...props }: Props) => {
 
   const [isInit, setIsInit] = useState(false);
   const [isDrag, setIsDrag] = useState(false);
-  const [isButton, setIsButton] = useState(0);
+  const [isAnimating, setIsAnumating] = useState(false);
   const [isTransition, setIsTransition] = useState(false);
 
   const initBox = useCallback((widthBox: number) => {
@@ -84,7 +84,7 @@ export const Slider = ({ children, ...props }: Props) => {
         }
       }
 
-      setIsButton(position.get());
+      setIsAnumating(true);
     },
     [container, left],
   );
@@ -101,9 +101,17 @@ export const Slider = ({ children, ...props }: Props) => {
 
   useEffect(() => {
     const initHandler = () => setIsInit(false);
+    const scrollHandler = (e: any) => e.preventDefault();
 
     window.addEventListener('resize', initHandler);
-    return () => window.removeEventListener('resize', initHandler);
+    refContainer.current!.addEventListener('mousewheel', scrollHandler);
+    refContainer.current!.addEventListener('touchmove', scrollHandler);
+
+    return () => {
+      window.removeEventListener('resize', initHandler);
+      refContainer.current!.removeEventListener('mousewheel', scrollHandler);
+      refContainer.current!.removeEventListener('touchmove', scrollHandler);
+    };
   }, []);
 
   return (
@@ -118,11 +126,23 @@ export const Slider = ({ children, ...props }: Props) => {
 
       <div className={styles.content}>
         <button
+          disabled={isAnimating}
           className={position.get() < 0 && !isTransition ? '' : styles.hidden}
-          style={{ left: `-${35 + arrowMargin}px` }}
+          style={{ left: `${arrowMargin}px` }}
           onClick={() => handleTrack('left')}
         >
           <IconArrow direction="left" />
+        </button>
+
+        <button
+          disabled={isAnimating}
+          className={
+            position.get() > left && !isTransition ? '' : styles.hidden
+          }
+          style={{ right: `${arrowMargin}px` }}
+          onClick={() => handleTrack('right')}
+        >
+          <IconArrow direction="right" />
         </button>
 
         <div ref={refContainer} className={styles.track}>
@@ -141,6 +161,7 @@ export const Slider = ({ children, ...props }: Props) => {
             animate={{ x: position.get() }}
             transition={{ duration: 0.2, type: 'tween' }}
             onDragTransitionEnd={() => handleTransition()}
+            onAnimationComplete={() => setIsAnumating(false)}
             onLayoutMeasure={(box) => {
               if (!isInit) initBox(box.x.max - box.x.min);
             }}
@@ -161,16 +182,6 @@ export const Slider = ({ children, ...props }: Props) => {
             </div>
           </motion.div>
         </div>
-
-        <button
-          className={
-            position.get() > left && !isTransition ? '' : styles.hidden
-          }
-          style={{ right: `-${35 + arrowMargin}px` }}
-          onClick={() => handleTrack('right')}
-        >
-          <IconArrow direction="right" />
-        </button>
       </div>
     </section>
   );
